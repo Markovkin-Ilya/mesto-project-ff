@@ -4,7 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    entry: { main: './src/components/index.js' },
+    entry: { main: './src/index.js' },
     output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'main.js',
@@ -26,7 +26,7 @@ module.exports = {
           // добавили правило для обработки файлов
           {
             // регулярное выражение, которое ищет все файлы с такими расширениями
-            test: /\..(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
+            test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
             type: 'asset/resource'
           },
           {

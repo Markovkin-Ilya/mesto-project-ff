@@ -1,7 +1,7 @@
-import {initialCards} from "./cards.js";
-import {createCard, deleteCard, likeCard, openFoto} from "./card.js";
-import { openModal,closeModal } from "./modal.js";
-import '../pages/index.css';
+import {initialCards} from "./components/cards.js";
+import {createCard, deleteCard, likeCard, openFoto} from "./components/card.js";
+import { openModal,closeModal } from "./components/modal.js";
+import './pages/index.css';
 
 const container = document.querySelector(".places__list");
 const openEditButton = document.querySelector(".profile__edit-button");
