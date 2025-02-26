@@ -1,35 +1,25 @@
-import { openModal } from "./modal";
-
 const cardTemplate = document.querySelector('#card-template');
 
-function createCard (region, deleteCallback, likeCard, openFoto) {
+function createCard (cardData, deleteCallback, likeCard, openPopupImage) {
   const cardElement = cardTemplate.content.cloneNode(true).querySelector(".card");
-  const deleteElement = cardElement.querySelector('.card__delete-button');
-  const likeElement = cardElement.querySelector('.card__like-button');
-  const foto = cardElement.querySelector('.card__image');
-  foto.setAttribute('src', region.link);
-  foto.setAttribute('alt', region.name);
-  cardElement.querySelector('.card__title').textContent = region.name;
-  deleteElement.addEventListener('click',  () => deleteCallback(cardElement));
-  likeElement.addEventListener('click', () => likeCard(likeElement) )
-  foto.addEventListener('click', () => openFoto(foto))
+  const deleteButton = cardElement.querySelector('.card__delete-button');
+  const likeButton = cardElement.querySelector('.card__like-button');
+  const photo = cardElement.querySelector('.card__image');
+  photo.src = cardData.link;
+  photo.alt = cardData.name;
+  cardElement.querySelector('.card__title').textContent = cardData.name;
+  deleteButton.addEventListener('click',  () => deleteCallback(cardElement));
+  likeButton.addEventListener('click', () => likeCard(likeButton) )
+  photo.addEventListener('click', () => openPopupImage(photo))
   return cardElement;
 };
 
-function deleteCard(item){
-  item.remove()
+function deleteCard(cardElement){
+  cardElement.remove()
 };
 
-function likeCard(item) {
-  item.classList.toggle('card__like-button_is-active');
+function likeCard(likeButton) {
+  likeButton.classList.toggle('card__like-button_is-active');
 };
 
-function openFoto(item) {
-  const picture = document.querySelector('.popup__image');
-  const name = document.querySelector('.popup__caption');
-  picture.setAttribute('src', item.getAttribute('src') );
-  name.textContent = item.getAttribute('alt');
-  openModal('popup_type_image');
-}
-
-export {createCard, deleteCard, likeCard, openFoto};
+export {createCard, deleteCard, likeCard};
