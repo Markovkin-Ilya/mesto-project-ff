@@ -1,6 +1,6 @@
 import {initialCards} from "./components/cards.js";
 import {createCard, deleteCard, likeCard} from "./components/card.js";
-import { openModal,closeModal } from "./components/modal.js";
+import { openModal, closeModal, setCloseModalByClickListeners } from "./components/modal.js";
 import './pages/index.css';
 
 const container = document.querySelector(".places__list");
@@ -21,33 +21,21 @@ const titleName = document.querySelector(".profile__title");
 const titleDescription = document.querySelector(".profile__description");
 const popups = [popupAuthor, popupNewCard, popupOpenImage];
 
-function handleFormPopupAuthor(evt) {
+function handleFormPopupAuthorSubmit(evt) {
   evt.preventDefault();
   titleName.textContent = inputName.value;
   titleDescription.textContent = inputDescription.value;
   closeModal(popupAuthor);
 };
 
-function handleFormPopupNewCard (evt) {
+function handleFormPopupNewCardSubmit (evt) {
   evt.preventDefault();
   const card = {};
   card.name = inputPlace.value;
   card.link = inputLink.value;
-  container.prepend(createCard(card, deleteCard, likeCard, openPhoto));
+  container.prepend(createCard(card, deleteCard, likeCard, openPopupImage));
   formPlace.reset();
   closeModal(popupNewCard);
-};
-
-function setCloseModalByClickListeners(popupList) {
-  popupList.forEach((popup) => {
-    const closeButton = popup.querySelector(".popup__close");
-    closeButton.addEventListener('click', () => { closeModal(popup)});
-    popup.addEventListener('click', (evt) => { 
-      if (evt.currentTarget === evt.target) {
-        closeModal(evt.target);
-      }
-    });
-  });
 };
 
 function openPopupAuthor() {
@@ -75,8 +63,8 @@ setCloseModalByClickListeners(popups);
 
 openPopupAuthorButton.addEventListener('click', openPopupAuthor);
 openPopupNewCardButton.addEventListener('click', openPopupNewCard);
-formEdit.addEventListener('submit', handleFormPopupAuthor);
-formPlace.addEventListener('submit', handleFormPopupNewCard);
+formEdit.addEventListener('submit', handleFormPopupAuthorSubmit);
+formPlace.addEventListener('submit', handleFormPopupNewCardSubmit);
 
 
 
