@@ -1,15 +1,15 @@
 
 function openModal (popup) {
   popup.classList.add('popup_is-opened');
-  document.addEventListener('keydown', CloseModalByEsc);
+  document.addEventListener('keydown', closeModalByEsc);
 };
 
 function closeModal (popup) {
   popup.classList.remove('popup_is-opened');
-  document.removeEventListener('keydown', CloseModalByEsc);
+  document.removeEventListener('keydown', closeModalByEsc);
 };
 
-function CloseModalByEsc(evt) {
+function closeModalByEsc(evt) {
   if (evt.key === 'Escape') {
     closeModal(document.querySelector('.popup_is-opened'));
   };
