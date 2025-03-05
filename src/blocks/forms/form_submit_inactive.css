@@ -3,6 +3,7 @@
     color: #000;
     opacity: 20%;
     outline: 1px solid #000;
+    transition: 0.5s;
 }
 
 .form_submit_inactive:hover {

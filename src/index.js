@@ -1,6 +1,7 @@
 import {initialCards} from "./components/cards.js";
 import {createCard, deleteCard, likeCard} from "./components/card.js";
 import { openModal, closeModal, setCloseModalByClickListeners } from "./components/modal.js";
+import { enableValidation, clearValidation } from "./components/validation.js";
 import './pages/index.css';
 
 const container = document.querySelector(".places__list");
@@ -19,7 +20,16 @@ const popupNewCard = document.querySelector('.popup_type_new-card');
 const popupOpenImage = document.querySelector('.popup_type_image');
 const titleName = document.querySelector(".profile__title");
 const titleDescription = document.querySelector(".profile__description");
+const titleAvatar = document.querySelector(".profile__image");
 const popups = [popupAuthor, popupNewCard, popupOpenImage];
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'form_submit_inactive',
+  inputErrorClass: 'form_input_type_error',
+  errorClass: 'form_input_error_active'
+}
 
 function handleFormPopupAuthorSubmit(evt) {
   evt.preventDefault();
@@ -42,11 +52,11 @@ function openPopupAuthor() {
   openModal(popupAuthor);
   inputName.value = titleName.innerHTML;
   inputDescription.value = titleDescription.innerHTML;
-  clearValidation(formEdit);
+  clearValidation(formEdit, validationConfig);
 };
 
 function openPopupNewCard() {
-  clearValidation(formPlace);
+  clearValidation(formPlace, validationConfig);
   inputPlace.value = '';
   inputLink.value = '';
   openModal(popupNewCard);
@@ -59,10 +69,6 @@ function openPopupImage(item) {
   openModal(popupOpenImage);
 }
 
-initialCards.forEach(item => {
-  container.append(createCard(item, deleteCard, likeCard, openPopupImage));
-});
-
 setCloseModalByClickListeners(popups);
 
 openPopupAuthorButton.addEventListener('click', openPopupAuthor);
@@ -70,92 +76,33 @@ openPopupNewCardButton.addEventListener('click', openPopupNewCard);
 formEdit.addEventListener('submit', handleFormPopupAuthorSubmit);
 formPlace.addEventListener('submit', handleFormPopupNewCardSubmit);
 
+enableValidation(validationConfig); 
 
 
-//ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-
-  
-const enableValidation = () => {
-  const formList = Array.from(document.querySelectorAll('.popup__form'));
-  formList.forEach((formElement) => {
-    setEventListeners(formElement);
-  });
-};
-
-const setEventListeners = (formElement) => {
-  const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-  const buttonElement = formElement.querySelector('.popup__button');
-  toggleButtonState(inputList, buttonElement);
-  inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', () => {
-      isValid(formElement, inputElement);
-      toggleButtonState(inputList, buttonElement);
-    });
-  });
-}; 
-
-const clearValidation = (formElement) => {
-  const buttonElement = formElement.querySelector('.popup__button');
-  const inputList = Array.from(formElement.querySelectorAll('.popup__input'));
-  inputList.forEach((inputElement) => {
-  hideInputError(formElement, inputElement);
-  });
-  toggleButtonState(inputList, buttonElement);
-  };
+fetch('https://nomoreparties.co/v1/wff-cohort-33/users/me', {
+  headers: {
+    authorization: '16c44a00-cd7b-4602-9225-799abf9a6f4f'
+  }
+})
+.then(res => res.json())
+  .then((result) => {
+    titleName.textContent = result.name;
+    titleDescription.textContent = result.about;
+    titleAvatar.src = result.avatar;
+  }); 
 
 
-const showInputError = (formElement, inputElement, errorMessage) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.add('form_input_type_error');
-  errorElement.textContent = errorMessage;
-  errorElement.classList.add('form_input_error_active');
-};
-  
-const hideInputError = (formElement, inputElement) => {
-  const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove('form_input_type_error');
-  errorElement.classList.remove('form_input_error_active');
-  errorElement.textContent = '';
-}; 
-  
-const isValid = (formElement, inputElement) => {
-  if (inputElement.validity.patternMismatch) {
-    inputElement.setCustomValidity(inputElement.dataset.errorMessage);
-  } else {
-      inputElement.setCustomValidity("");
+  fetch('https://nomoreparties.co/v1/wff-cohort-33/cards', {
+    headers: {
+      authorization: '16c44a00-cd7b-4602-9225-799abf9a6f4f'
     }
-  if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage);
-  } else {
-      hideInputError(formElement, inputElement);
-    }
-}; 
-
-  const hasInvalidInput = (inputList) => {
-    return inputList.some((inputElement) => {
-      return !inputElement.validity.valid;
+  })
+  .then(res => res.json())
+  .then((res) => {
+    res.forEach((card) => {
+      container.append(createCard(card, deleteCard, likeCard, openPopupImage));
     })
-  }; 
-
-  const toggleButtonState = (inputList, buttonElement) => {
-    if (hasInvalidInput(inputList)) {
-          buttonElement.disabled = true;
-      buttonElement.classList.add('form_submit_inactive');
-    } else {
-          buttonElement.disabled = false;
-      buttonElement.classList.remove('form_submit_inactive');
-    }
-  }; 
-
-  enableValidation({
-    formSelector: '.popup__form',
-    inputSelector: '.popup__input',
-    submitButtonSelector: '.popup__button',
-    inactiveButtonClass: 'form_submit_inactive',
-    inputErrorClass: 'form_input_type_error',
-    errorClass: 'form_input_error_active'
   });
-
 
 
 
