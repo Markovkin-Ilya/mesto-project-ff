@@ -1,4 +1,3 @@
-import {initialCards} from "./components/cards.js";
 import {createCard, deleteCard, likeCard} from "./components/card.js";
 import { openModal, closeModal, setCloseModalByClickListeners } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
@@ -79,30 +78,40 @@ formPlace.addEventListener('submit', handleFormPopupNewCardSubmit);
 enableValidation(validationConfig); 
 
 
-fetch('https://nomoreparties.co/v1/wff-cohort-33/users/me', {
-  headers: {
-    authorization: '16c44a00-cd7b-4602-9225-799abf9a6f4f'
-  }
-})
-.then(res => res.json())
+function uploadFirstInfomation() {
+ fetch('https://nomoreparties.co/v1/wff-cohort-33/users/me', {
+    headers: {
+      authorization: '16c44a00-cd7b-4602-9225-799abf9a6f4f'
+    }
+  })
+  .then(res => res.json())
   .then((result) => {
     titleName.textContent = result.name;
     titleDescription.textContent = result.about;
     titleAvatar.src = result.avatar;
-  }); 
-
+  })
+  .catch((err) => {
+    console.log('Ошибка. Запрос не выполнен: ', err)
+  });
 
   fetch('https://nomoreparties.co/v1/wff-cohort-33/cards', {
     headers: {
       authorization: '16c44a00-cd7b-4602-9225-799abf9a6f4f'
     }
   })
-  .then(res => res.json())
+  .then(res =>  res.json())
+
   .then((res) => {
     res.forEach((card) => {
       container.append(createCard(card, deleteCard, likeCard, openPopupImage));
     })
+  })
+  .catch((err) => {
+    console.log('Ошибка. Запрос не выполнен: ', err)
   });
 
 
+};
 
+
+uploadFirstInfomation()
