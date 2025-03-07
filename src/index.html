@@ -16,7 +16,7 @@
     <section class="profile page__section">
      <img 
       class="profile__image" 
-      src='<%=require("./images/avatar.jpg")%>'
+      src=''
       alt="Аватар"></img>
       <div class="profile__info">
         <h1 class="profile__title"></h1>
@@ -104,6 +104,13 @@
       <p class="popup__caption"></p>
     </div>
   </div>
+  <div class="popup popup_type_delete popup_is-animated">
+    <div class="popup__content popup__content_content_delete">
+      <button type="button" class="popup__close"></button>
+      <h3 class="popup__title">Вы уверены?</h3>
+      <button type="button" class="button popup__button popup__button_delete">Да</button>
+    </div>
+  </div>
 </div>
 
 <template id="card-template">
@@ -113,7 +120,10 @@
     <div class="card__description">
       <h2 class="card__title">
       </h2>
-      <button type="button" class="card__like-button"></button>
+      <div class="card__like">
+        <button type="button" class="card__like-button"></button>
+        <p class="card__like-amount">0</p>
+      </div> 
     </div>
   </li>
 </template>
