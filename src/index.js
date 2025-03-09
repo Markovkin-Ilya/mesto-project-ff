@@ -1,4 +1,4 @@
-import {createCard, likeCard} from "./components/card.js";
+import {createCard} from "./components/card.js";
 import { openModal, closeModal, setCloseModalByClickListeners } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
 import './pages/index.css';
@@ -66,9 +66,9 @@ function openPopupImage(item) {
   openModal(popupOpenImage);
 }
 
-function openPopupDelete (cardData) {
+function openPopupDelete (card, cardId) {
   openModal(popupDeletCard);
-  deleteButton.addEventListener('click', () => {deleteCard(cardData)});
+  deleteButton.addEventListener('click', () => {deleteCard(card, cardId)});
 }
 
 setCloseModalByClickListeners(popups);
@@ -98,7 +98,7 @@ Promise.all([
   .then(results => Promise.all(results.map(r => r.json())))
   .then((res) => {
     res[1].forEach((card) => {
-      container.append(createCard(card, deleteCard, likeCard, openPopupImage));
+      container.append(createCard(card, openPopupDelete, likeCard, openPopupImage));
     })
     titleName.textContent = res[0].name;
     titleDescription.textContent = res[0].about;
@@ -145,7 +145,7 @@ function requestAddCard (inputPlace, inputLink) {
   })
   .then((res) => res.json())
   .then((res) => {
-    container.prepend(createCard(res, deleteCard, likeCard, openPopupImage));
+    container.prepend(createCard(res, openPopupDelete, likeCard, openPopupImage));
   })
 
   .catch((err) => {
@@ -162,12 +162,42 @@ function deleteCardPrompt(cardId){
   });
 };
 
+function likeCardPrompt(cardId){
+  return  fetch(`https://nomoreparties.co/v1/wff-cohort-33/cards/likes/${cardId}`, {
+    method: 'PUT',
+    headers: {
+      authorization: '16c44a00-cd7b-4602-9225-799abf9a6f4f'
+    }
+  });
+}
+
+function disLikePrompt(cardId){
+  return  fetch(`https://nomoreparties.co/v1/wff-cohort-33/cards/likes/${cardId}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: '16c44a00-cd7b-4602-9225-799abf9a6f4f'
+    }
+  });
+}
+
 function deleteCard (card, cardId) {
   deleteCardPrompt(cardId)
   .then(() => card.remove())
+  closeModal(popupDeletCard);
 }
 
-
-
+function likeCard(likeButton, cardId, likeAmount) {
+  if (likeButton.classList.contains('card__like-button_is-active')){
+    disLikePrompt(cardId)
+    .then((res) => res.json())
+    .then(res => likeAmount.textContent = `${res.likes.length}`)
+  }
+  else{
+    likeCardPrompt(cardId)
+    .then((res) => res.json())
+    .then(res => likeAmount.textContent = `${res.likes.length}`)
+  }
+  likeButton.classList.toggle('card__like-button_is-active');
+};
 
 uploadFirstInfomation()
