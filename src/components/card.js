@@ -13,8 +13,8 @@ function createCard (cardData, deleteCallback, likeCard, openPopupImage) {
     cardElement.querySelector('.card__title').textContent = cardData.name;
     likeButton.addEventListener('click', () => likeCard(likeButton) );
     photo.addEventListener('click', () => openPopupImage(photo));
-    if(cardData.owner._id === '0b154399d87f03068da912df' ) {
-      deleteButton.addEventListener('click',  () => {deleteCallback(cardData.json)});
+   if(cardData.owner._id === '0b154399d87f03068da912df' ) {
+      deleteButton.addEventListener('click', () => deleteCallback(cardElement, cardData._id));
     }
     else {
       deleteButton.style.display = "none"

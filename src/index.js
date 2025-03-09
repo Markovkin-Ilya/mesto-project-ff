@@ -23,7 +23,6 @@ const titleDescription = document.querySelector(".profile__description");
 const titleAvatar = document.querySelector(".profile__image");
 const deleteButton = document.querySelector('.popup__button_delete');
 const popups = [popupAuthor, popupNewCard, popupOpenImage, popupDeletCard];
-const newCard = {};
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -41,9 +40,7 @@ function handleFormPopupAuthorSubmit(evt) {
 
 function handleFormPopupNewCardSubmit (evt) {
   evt.preventDefault();
-  const card = {};
-  requestAddCard (inputPlace, inputLink, card)
-  container.prepend(createCard(card, openPopupDelete(newCard), likeCard, openPopupImage));
+  requestAddCard (inputPlace, inputLink)
   formPlace.reset();
   closeModal(popupNewCard);
 };
@@ -101,7 +98,7 @@ Promise.all([
   .then(results => Promise.all(results.map(r => r.json())))
   .then((res) => {
     res[1].forEach((card) => {
-      container.append(createCard(card, openPopupDelete, likeCard, openPopupImage));
+      container.append(createCard(card, deleteCard, likeCard, openPopupImage));
     })
     titleName.textContent = res[0].name;
     titleDescription.textContent = res[0].about;
@@ -134,7 +131,7 @@ function editProfile (inputName, inputAbout, titleName, titleAbout){
   })
 };
 
-function requestAddCard (inputPlace, inputLink, card) {
+function requestAddCard (inputPlace, inputLink) {
   fetch('https://nomoreparties.co/v1/wff-cohort-33/cards', {
     method: 'POST',
     headers: {
@@ -148,24 +145,27 @@ function requestAddCard (inputPlace, inputLink, card) {
   })
   .then((res) => res.json())
   .then((res) => {
-    card.name = res.name;
-    card.link = res.link;
-    newCard = res.json();
+    container.prepend(createCard(res, deleteCard, likeCard, openPopupImage));
   })
+
   .catch((err) => {
     console.log('Ошибка. Запрос не выполнен: ', err)
   })
 };
 
-function deleteCard(cardData){
-  fetch(`https://nomoreparties.co/v1/wff-cohort-33/cards/${cardData._id}`, {
+function deleteCardPrompt(cardId){
+ return  fetch(`https://nomoreparties.co/v1/wff-cohort-33/cards/${cardId}`, {
     method: 'DELETE',
     headers: {
       authorization: '16c44a00-cd7b-4602-9225-799abf9a6f4f'
     }
   });
-  closeModal(popupDeletCard);
 };
+
+function deleteCard (card, cardId) {
+  deleteCardPrompt(cardId)
+  .then(() => card.remove())
+}
 
 
 
