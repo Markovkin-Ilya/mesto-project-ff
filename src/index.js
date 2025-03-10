@@ -146,8 +146,6 @@ function likeCard(likeButton, cardId, likeAmount) {
   likeButton.classList.toggle('card__like-button_is-active');
 };
 
-setCloseModalByClickListeners(popups);
-
 openPopupAuthorButton.addEventListener('click', openPopupAuthor);
 openPopupNewCardButton.addEventListener('click', openPopupNewCard);
 openPopupAvatarButton.addEventListener('click', openPopupAvatar);
@@ -155,18 +153,20 @@ formEdit.addEventListener('submit', handleFormPopupAuthorSubmit);
 formPlace.addEventListener('submit', handleFormPopupNewCardSubmit);
 formAvatar.addEventListener('submit', handlFormPopupAvatar);
 
+setCloseModalByClickListeners(popups);
+
 enableValidation(validationConfig); 
 
 uploadFirstInfomation()
 .then(results => Promise.all(results.map(r => r.json())))
-  .then((res) => {
-    res[1].forEach((card) => {
-      container.append(createCard(card, openPopupDelete, likeCard, openPopupImage));
-    })
-    titleName.textContent = res[0].name;
-    titleDescription.textContent = res[0].about;
-    titleAvatar.src = res[0].avatar;
+.then((res) => {
+  res[1].forEach((card) => {
+    container.append(createCard(card, openPopupDelete, likeCard, openPopupImage));
   })
-  .catch((err) => {
-    console.log('Ошибка. Запрос не выполнен: ', err)
-  });
+  titleName.textContent = res[0].name;
+  titleDescription.textContent = res[0].about;
+  titleAvatar.src = res[0].avatar;
+})
+.catch((err) => {
+  console.log('Ошибка. Запрос не выполнен: ', err)
+});

@@ -22,9 +22,9 @@ const editProfile = (inputName, inputAbout) => {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
-        name: `${inputName.value}`,
-        about: `${inputAbout.value}`
-      })
+      name: `${inputName.value}`,
+      about: `${inputAbout.value}`
+    })
   })
 };
 
@@ -33,9 +33,9 @@ const requestAddCard = (inputPlace, inputLink) => {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify({
-        name: `${inputPlace.value}`,
-        link: `${inputLink.value}`
-      })
+      name: `${inputPlace.value}`,
+      link: `${inputLink.value}`
+    })
   })
 };
 
@@ -44,9 +44,9 @@ const editAvatarPrompt = (inputAvatar) => {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
-        avatar: `${inputAvatar.value}`,
-      })
+      avatar: `${inputAvatar.value}`,
     })
+  })
 };
 
 const deleteCardPrompt = (cardId) => {
@@ -67,7 +67,7 @@ const disLikePrompt = (cardId) => {
   return  fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
-    })
+  })
 };
 
 export {uploadFirstInfomation, editProfile, requestAddCard, editAvatarPrompt, deleteCardPrompt, likeCardPrompt, disLikePrompt};

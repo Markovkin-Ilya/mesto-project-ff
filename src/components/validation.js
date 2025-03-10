@@ -4,7 +4,7 @@ const enableValidation = (selector) => {
     setEventListeners(formElement, selector);
   });
 };
-  
+
 const setEventListeners = (formElement, selector) => {
   const inputList = Array.from(formElement.querySelectorAll(selector.inputSelector));
   const buttonElement = formElement.querySelector(selector.submitButtonSelector);
@@ -16,7 +16,7 @@ const setEventListeners = (formElement, selector) => {
     });
   });
 }; 
-  
+
 const clearValidation = (formElement, selector) => {
   const buttonElement = formElement.querySelector(selector.submitButtonSelector);
   const inputList = Array.from(formElement.querySelectorAll(selector.inputSelector));
@@ -25,22 +25,21 @@ const clearValidation = (formElement, selector) => {
   });
   toggleButtonState(inputList, buttonElement, selector);
 };
-  
-  
+
 const showInputError = (formElement, inputElement, errorMessage, selector) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(selector.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(selector.errorClass);
 };
-    
+
 const hideInputError = (formElement, inputElement, selector) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(selector.inputErrorClass);
   errorElement.classList.remove(selector.errorClass);
   errorElement.textContent = '';
 }; 
-    
+
 const isValid = (formElement, inputElement, selector) => {
   if (inputElement.validity.patternMismatch) {
     inputElement.setCustomValidity(inputElement.dataset.errorMessage);
@@ -55,13 +54,13 @@ const isValid = (formElement, inputElement, selector) => {
     hideInputError(formElement, inputElement, selector);
   }
 }; 
-  
+
 const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
     return !inputElement.validity.valid;
   })
 }; 
-  
+
 const toggleButtonState = (inputList, buttonElement, selector) => {
   if (hasInvalidInput(inputList)) {
     buttonElement.disabled = true;
