@@ -1,3 +1,5 @@
+import { request,checkResponse } from "../utils/request";
+
 const config = {
   baseUrl:'https://nomoreparties.co/v1/wff-cohort-33', 
   headers: {
@@ -15,21 +17,22 @@ const uploadFirstInfomation = () => {
       headers: config.headers
     }),
   ])
+  .then(results => Promise.all(results.map((r) => checkResponse(r))))
 };
 
 const editProfile = (inputName, inputAbout) => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify({
-      name: `${inputName.value}`,
+  return request(`${config.baseUrl}/users/me`, {
+    method: 'PATCH', 
+    headers: config.headers, 
+    body: JSON.stringify({ 
+      name: `${inputName.value}`, 
       about: `${inputAbout.value}`
     })
   })
 };
 
 const requestAddCard = (inputPlace, inputLink) => {
-  return fetch(`${config.baseUrl}/cards`, {
+  return request(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: config.headers,
     body: JSON.stringify({
@@ -40,7 +43,7 @@ const requestAddCard = (inputPlace, inputLink) => {
 };
 
 const editAvatarPrompt = (inputAvatar) => {
-  return  fetch(`${config.baseUrl}/users/me/avatar`, {
+  return request(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
@@ -50,21 +53,21 @@ const editAvatarPrompt = (inputAvatar) => {
 };
 
 const deleteCardPrompt = (cardId) => {
-  return  fetch(`${config.baseUrl}/cards/${cardId}`, {
+  return request(`${config.baseUrl}/cards/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
   })
 };
 
 const likeCardPrompt = (cardId) => {
-  return  fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+  return request(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'PUT',
     headers: config.headers
   })
 };
 
 const disLikePrompt = (cardId) => {
-  return  fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+  return request(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: 'DELETE',
     headers: config.headers
   })
