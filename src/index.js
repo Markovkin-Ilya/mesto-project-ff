@@ -18,7 +18,7 @@ function handleFormPopupAuthorSubmit(evt) {
     closeModal(popupAuthor);
   })
   .catch(console.error)
-  .finally(() => evt.submitter.textContent = 'Сохраненить')
+  .finally(() => evt.submitter.textContent = 'Сохранить')
   evt.submitter.textContent = 'Сохранение...';
 };
 
@@ -30,7 +30,7 @@ function handleFormPopupNewCardSubmit (evt) {
     closeModal(popupNewCard);
   })
   .catch(console.error)
-  .finally(() => evt.submitter.textContent = 'Сохраненить')
+  .finally(() => evt.submitter.textContent = 'Сохранить')
   evt.submitter.textContent = 'Сохранение...';
 };
 
@@ -42,7 +42,7 @@ function handlFormPopupAvatar(evt) {
     closeModal(popupAvatar);
   })
   .catch(console.error)
-  .finally(() => evt.submitter.textContent = 'Сохраненить')
+  .finally(() => evt.submitter.textContent = 'Сохранить')
   evt.submitter.textContent = 'Сохранение...';
 }
 
@@ -93,15 +93,20 @@ function deleteCard (card, cardId) {
 function likeCard(likeButton, cardId, likeAmount) {
   if (likeButton.classList.contains('card__like-button_is-active')){
     disLikePrompt(cardId)
-    .then(res => likeAmount.textContent = `${res.likes.length}`)
+    .then(res => {
+      likeAmount.textContent = `${res.likes.length}`;
+      likeButton.classList.toggle('card__like-button_is-active');
+    })
     .catch(console.error)
   }
   else{
     likeCardPrompt(cardId)
-    .then(res => likeAmount.textContent = `${res.likes.length}`)
+    .then(res => {
+      likeAmount.textContent = `${res.likes.length}`;
+      likeButton.classList.toggle('card__like-button_is-active');
+    })
     .catch(console.error)
   }
-  likeButton.classList.toggle('card__like-button_is-active');
 };
 
 uploadFirstInfomation()
