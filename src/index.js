@@ -95,7 +95,7 @@ function likeCard(likeButton, cardId, likeAmount) {
     disLikePrompt(cardId)
     .then(res => {
       likeAmount.textContent = `${res.likes.length}`;
-      likeButton.classList.toggle('card__like-button_is-active');
+      likeButton.classList.remove('card__like-button_is-active');
     })
     .catch(console.error)
   }
@@ -103,7 +103,7 @@ function likeCard(likeButton, cardId, likeAmount) {
     likeCardPrompt(cardId)
     .then(res => {
       likeAmount.textContent = `${res.likes.length}`;
-      likeButton.classList.toggle('card__like-button_is-active');
+      likeButton.classList.add('card__like-button_is-active');
     })
     .catch(console.error)
   }
